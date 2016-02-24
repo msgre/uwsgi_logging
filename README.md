@@ -10,18 +10,18 @@ application logs on container's stdout.
 I wasn't able to find right combination of settings mainly due to my lack
 of knowledge about uWSGI. But smarter head pointing me to this:
 
-    uWSGI is logging to its stderr. App will inherit both stdout/stderr fds
-    from parent, so their logs are mixed on stderr, but stdout is app only.
-    uWSGI is silent on stdout AFAIK.
+> uWSGI is logging to its stderr. App will inherit both stdout/stderr fds
+> from parent, so their logs are mixed on stderr, but stdout is app only.
+> uWSGI is silent on stdout AFAIK.
 
 With this information I set up first part of the puzzle -- Django application.
-See [LOGGING][src/demo/demo/settings.py] and two simple [views with
-logging][src/demo/demo/settings.py]. If you try it in your local environment
+See [LOGGING](src/demo/demo/settings.py#L127-L150) and two simple [views with
+logging](src/demo/app1/views.py#L7-L15). If you try it in your local environment
 with internal `runserver` command, you will see log messages mixed into
 `runserver` acesss logs.
 
 Second part is uWSGI. Its launch is invoked inside container by this [Dockerfile 
-commands][Dockerfile].
+commands](Dockerfile#L11-L17).
 
 Last beast is Nginx. It just listening on HTTP and forwarding traffic to 
 `uwsgi`.
@@ -51,10 +51,10 @@ is by default `192.168.99.100`).
 It is possible to run container in 2 different ways:
 
 * If you want to see output from `uwsgi` and Django application mixed in one
-  output, run [variant 1][Dockerfile]
+  output, run [variant 1](Dockerfile#L11-L13)
 * If you want to see **just** Django application logs, you could redirect
-  stderr to `/dev/null`. See [variant 2][Dockerfile] with *shell* syntax of
-  [CMD][https://docs.docker.com/engine/reference/builder/#cmd] instruction.
+  stderr to `/dev/null`. See [variant 2](Dockerfile#L15-L17) with *shell* syntax of
+  [CMD](https://docs.docker.com/engine/reference/builder/#cmd) instruction.
 
 
 # Thanks
